@@ -1,5 +1,7 @@
 # PyPong - Learn Python with Pong
 
+![screenshot](doc/screenshot.png)
+
 This is a learning project to teach people the basics of Python and some of its modules. This document is a guide that shows you step by step how to implement a Pong clone on your own, including:
 
 * Python
