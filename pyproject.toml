@@ -8,6 +8,7 @@ authors = ["Volker Janz <volker.janz@innogames.com>"]
 python = "^3.7"
 pygame = "^1.9"
 numpy = "^1.17"
+sklearn = "^0.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"

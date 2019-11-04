@@ -1,6 +1,6 @@
 import numpy as np
 
-from computer import Computer
+from computer_sklearn import Computer
 from background import Background
 from ball import Ball
 from ball_gui import BallGui

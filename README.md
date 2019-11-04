@@ -2,14 +2,15 @@
 
 ![screenshot](doc/screenshot.png)
 
-This is a learning project to teach people the basics of Python and some of its modules. This document is a guide that shows you step by step how to implement a Pong clone on your own, including:
+This is a learning project to teach people the basics of Python and some of its modules. This document is a guide that shows you step by step how to implement a Pong clone on your own and even learn some Machine Learning basics, including:
 
 * Python
 * Python project setup with virtual environments
 * How to use PyCharm with virtual environments
 * How to use Poetry for dependency management
 * How to implement Pong with PyGame
-* Use basic math libraries
+* Use NumPy for vector calculations
+* Use scikit-learn to predict actions
 
 This repository already contains the final result. This guide will tell you step by step how to get there.
 
@@ -961,3 +962,9 @@ class PaddleGui:
 ## 18. The final result
 
 Check out the code in this repository to see the final result.
+
+## 19. Machine learning
+
+Python is often used for machine learning purposes. Even though this project does not really require any kind of machine learning to create a artifical player, I would still like to take the chance and give you a short introduction to machine learning using this project.
+
+For the next chapter, see: [LEARNING.md](LEARNING.md)
