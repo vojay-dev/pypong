@@ -1,5 +1,6 @@
 import numpy as np
 
+from computer import Computer
 from background import Background
 from ball import Ball
 from ball_gui import BallGui
@@ -10,7 +11,10 @@ from paddle_gui import PaddleGui
 
 class Game:
 
-    def __init__(self):
+    def __init__(self, paddle1computer=None, paddle2computer=None):
+        self.paddle1computer = paddle1computer
+        self.paddle2computer = paddle2computer
+
         self._setup()
         self._game_loop()
 
@@ -78,6 +82,13 @@ class Game:
         if pygame.key.get_pressed()[pygame.K_DOWN]:
             self.paddle2.move_down()
 
+        # let computer move the paddles if activated
+        if self.paddle1computer is not None:
+            self.paddle1computer.move(self.paddle1, self.ball)
+
+        if self.paddle2computer is not None:
+            self.paddle2computer.move(self.paddle2, self.ball)
+
     def _update_state(self):
         if collision_screen_left(self.ball):
             self.paddle1.lives -= 1
@@ -139,4 +150,11 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game()
+    # play against computer
+    game = Game(paddle2computer=Computer())
+
+    # play against human
+    #game = Game()
+
+    # computer vs computer
+    #game = Game(paddle1computer=Computer(), paddle2computer=Computer())

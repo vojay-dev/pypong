@@ -1,3 +1,4 @@
+import random
 import pygame
 
 
@@ -6,6 +7,9 @@ def acc_factor(paddle, ball):
     paddle_center = paddle.y + paddle.height / 2
 
     distance = ball_center - paddle_center
+
+    if distance == 0:
+        distance = random.randint(10, 100)
 
     return distance / 10
 

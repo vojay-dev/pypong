@@ -956,6 +956,7 @@ class PaddleGui:
 * The code in `game.py` should be turned into a `Game` class.
 * Using a specific key (e.g. `r`), the players should be able to reset the game.
 * When a player reaches 0 lives, the game should end and show a winner.
+* Add an optional computer player.
 
 ## 18. The final result
 
