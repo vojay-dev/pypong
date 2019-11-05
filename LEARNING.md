@@ -112,6 +112,10 @@ Now that we have a trained model, we can use it to predict actions based on new 
 
 The resulting AI (`computer_sklearn.py`) is acting similar to the hardcoded behavior in `computer.py`.
 
+## 6. More theory and data visualization
+
+work in progress...
+
 ## 5. Fin
 
 Using machine learning in this case does not really make sense but it is a good and simple example to understand the basics and how to implement a simple model.
