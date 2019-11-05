@@ -114,7 +114,79 @@ The resulting AI (`computer_sklearn.py`) is acting similar to the hardcoded beha
 
 ## 6. More theory and data visualization
 
-work in progress...
+Even though the AI is already working, let us have a closer look to get a better understanding of what happens under the hood.
+
+Short recap: Our training data has two features: the y position of the paddle center and the y position of the ball center. The target value is either 0 or 1 whereas 0 means: move the paddle up and 1 means: move the paddle down.
+
+We trained a logistic regression model so that it is able to predict the action (0 or 1) for new input tuples (i.e. paddle and ball positions).
+
+In order to demystify this process, I added a simple visualization. If you want to try it on your own, just go to `computer_sklearn.py` and uncomment the following line:
+
+```python
+self._visualize_data_relationship()
+```
+
+When you now start the application, you will see the following graph:
+
+![data relationship](doc/data_relationship.png)
+
+These are 1000 predictions of the model for random paddle and ball positions. Blue dots indicate that the model predicted to move the paddle up and magenta dots indicate that the model predicted to move the paddle down.
+
+As you can see, our model found a way to clearly separate those 2 clusters: whenever the y position of the ball position is bigger than the y position of the paddle, the model predicts: move up. Otherwise it predicts: move down.
+
+So our model found a function, that is giving us this result.
+
+However keep in mind: we are doing a logistic regression, that means we either get 0 or 1 as an output. This is usually done by applying a sigmoid function to the output of the underlying function of the model.
+
+![sigmoid](doc/sigmoid.png)
+
+As you can see, the sigmoid function returns 0 for smaller values and 1 for higher values. That means our model found a function that behaves in a way so that the result very low when the position value of the paddle is lower than the position value of the ball. Likewise this function returns a very high value, when the position value of the paddle is higher than the position value of the ball.
+
+The good thing is: we can even get this function from our model to get a better understanding how it looks like.
+
+To do this, we can just use the following snippet after training our model:
+
+```python
+self.model = LogisticRegression()
+self.model.fit(training_data, target_values)
+
+# prediction function used for linear regression
+print('f(paddle_center, ball_center) = {} + {} * paddle_center + {} * ball_center'.format(
+    round(self.model.intercept_[0], 4),
+    round(self.model.coef_[0][0], 4),
+    round(self.model.coef_[0][1], 4)
+))
+```
+
+Which will give us the following output:
+
+```python
+f(paddle_center, ball_center) = 0.0124 + -0.2783 * paddle_center + 0.2853 * ball_center
+```
+
+This is a simple function and we can even try it on our own with some data.
+
+Let us assume our paddle is at position 10 and the ball is at position 200. That means our paddle is above the ball and to get it, we need to move down. So what we expect is that the function returns a high value so that the sigmoid function turns it into a 1 which means: move down.
+
+```
+paddle_center = 10
+ball_center = 200
+
+0.0124 - 0.2783 * 10 + 0.2853 * 200 = 54.2894
+sigmoid(54.2894) = 1 = down
+```
+
+Now let us turn it around. Our paddle is at position 400 and the ball is at position 30. So we would need to move up.
+
+```
+paddle_center = 400
+ball_center = 30
+
+0.0124 - 0.2783 * 400 + 0.2853 * 30 = -102.7486
+sigmoid(-102.7486) = 0 = up
+```
+
+As you can see: it works :-) and this is what our model is doing all day long when we play the game.
 
 ## 5. Fin
 
