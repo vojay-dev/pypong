@@ -13,6 +13,8 @@ This guide includes:
 * Use NumPy for vector calculations
 * Use scikit-learn to predict actions
 
+## Table of contents
+
 - [PyPong - Learn Python and Machine Learning with Pong](#pypong---learn-python-and-machine-learning-with-pong)
   * [Requirements](#requirements)
   * [Project setup](#project-setup)
@@ -57,6 +59,8 @@ This guide includes:
   * [Fin](#fin)
 
 This repository already contains the final result. This guide will tell you step by step how to get there.
+
+---
 
 ## Requirements
 
