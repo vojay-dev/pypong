@@ -1,20 +1,21 @@
-# PyPong - Learn Python with Pong
+# PyPong - Learn Python and Machine Learning with Pong
 
 ![screenshot](doc/screenshot.png)
 
-This is a learning project to teach people the basics of Python and some of its modules. This document is a guide that shows you step by step how to implement a Pong clone on your own and even learn some Machine Learning basics, including:
+Hi there, this is a learning project to teach people the basics of Python, game development and machine learning. This document is a guide that shows you step by step how to implement an object-oriented Pong clone on your own with PyGame and how to create an AI playing it.
 
-* Python
-* Python project setup with virtual environments
+This guide includes:
+
+* Python basics
+* Python project and dependency management with Poetry
 * How to use PyCharm with virtual environments
-* How to use Poetry for dependency management
 * How to implement Pong with PyGame
 * Use NumPy for vector calculations
 * Use scikit-learn to predict actions
 
 This repository already contains the final result. This guide will tell you step by step how to get there.
 
-## 0. Requirements
+## Requirements
 
 Ensure to have the following components installed on your system:
 
@@ -22,7 +23,13 @@ Ensure to have the following components installed on your system:
 - Poetry (https://poetry.eustace.io/)
 - PyCharm (_Communiy Edition_)
 
-## 1. Setup project
+This guide was created on a Linux environment. You should have basic knowledge about how to interact with your system in a terminal.
+
+## Project setup
+
+The next steps are about setting up the project and getting familiar with Poetry.
+
+### Create the project with Poetry
 
 Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
 
@@ -32,7 +39,7 @@ We will now use it to create a new project. Just execute the following command i
 poetry new pypong
 ```
 
-## 2. Generated files
+### Generated files overview
 
 Let us have a look at the generated files without changing them:
 
@@ -47,19 +54,19 @@ Let us have a look at the generated files without changing them:
     └── test_pypong.py
 ```
 
-* `pypong/`: contains project source
-* `pyproject.toml`: poetry config and project dependencies
-* `README.rst`: markup file for readme
-* `tests/`: tests :-)
-* `__init__.py`: marks directories on disk as Python packages, might contain special attributes (e.g. project version)
+* `pypong/`: Contains project source
+* `pyproject.toml`: Poetry config and project dependencies
+* `README.rst`: Markup file for project documentation
+* `tests/`: Tests for the project
+* `__init__.py`: Marks directories on disk as Python packages, might contain special attributes (e.g. project version)
 
 Or in short: our code goes into `pypong/` and dependencies will be added to `pyproject.toml`. For now this is everything we need to know.
 
-## 3. First steps with Poetry
+### First steps with Poetry
 
-Now that there is a basic Poetry project, let us get familiar with how it works. Poetry is creating a vitual Python environment on your machine for each project and takes care of interacting with that `virtualenv` (e.g. installing dependencies).
+Now that there is a basic Poetry project, let us get familiar with how it works. Poetry is creating a vitual Python environment on your machine for each project and takes care of interacting with that so called `virtualenv` (e.g. installing dependencies).
 
-When you run code through Poetry it will interact with the virtualenv of the project and exectures the code within that environment.
+When you run code with Poetry it will interact with the virtual environmeent of the project and executes the code within that environment.
 
 That way projects are isolated and your system will be kept clean.
 
@@ -79,17 +86,19 @@ From now on the install command will use the dependency versions from the lock f
 poetry update
 ```
 
-For now nothing will change as we have the latest versions already.
+Nothing should change as we have the latest versions already.
 
-The next step is to execute commands via Poetry in the virtualenv. Let us start with a simple command:
+The next step is to execute commands via Poetry in the virtual environment. Let us start with a simple command:
 
 ```
 poetry run python -V
 ```
 
-This will run `python -V` in your virtualenv and should print your Python version.
+This will run `python -V` in your virtual environment and prints your Python version.
 
-## 4. Hello world
+## Hello world
+
+It is time to write some Python code.
 
 Create a new Python file in the source directory:
 
@@ -108,35 +117,43 @@ if __name__ == '__main__':
     main()
 ```
 
-The code should be self explaining. Instead of just printing out `Hello world` to stdout, we are calling a function that will do it for us.
+As you can see, the code has a special element, which is: `if __name__ == '__main__':`. Whatever is part of this code block will only be executed when you run this file explicitly with the Python interpreter.
+
+If you would get rid of the if-clause, the code would still work in our case as expected. However if someone includes this file into his project, he would also see the "Hello world" output because Python interprets all code in a file when it is imported and this might be an unexpected behavior.
+
+The variable `__name__` only contains the text `__name__` when you run the file with Python explicitly so when importing this file, no output would appear.
+
+That is why you should use this condition to mark the entry point to your application.
+
+The rest of the code should be self explaining. Instead of just printing out `Hello world` to stdout, we are calling a function that will do it for us.
 
 Give it a try and execute the code in your IDE (`Ctrl+Shift+F10`).
 
-Keep in mind, executing your code like this will use your local Python environment and not the virtualenv managed by Poetry.
+Keep in mind, executing your code like this will use your main Python environment and not the virtual environment managed by Poetry. This is not what we want so in the next chapter we will take care of configuring everything accordingly.
 
-## 5. Configuration
+## Configuration
 
 Before we continue with the actual project, let us do some preparation to make everything more awesome :-).
 
-### 5.1. Delete test dir
+### Cleanup files
 
-Let us start with deleting the `tests/` directory as this tutorial will not cover this part.
+We want to keep the project structure clean so let's get rid of files and folders we don't need for this particular project.
+
+This guide will not cover tests, even though testing is an essential part of software development. Therefore we can delete the `tests/` directory for now.
 
 ```
 rm -rf tests
 ```
 
-However, keep in mind: tests are important ;-)!
-
-### 5.2. Configure sources root in PyCharm
+### Configure sources root in PyCharm
 
 In PyCharm, right click on the `pypong/pypong` directory and click on `Mark Directory as -> Sources Root`.
 
-### 5.3. Configure virtualenv in PyCharm
+### Configure virtualenv in PyCharm
 
-The next step is a bit tricky. Poetry uses a virtualenv to run Python. We want PyCharm to use the exact same virtualenv when we run code via the IDE.
+The next step is a bit tricky. Poetry uses a virtual environment to run Python. We want PyCharm to use the exact same environment when we run code via the IDE.
 
-The first step is to find the location of the virutalenv. Just execute this command in the terminal within the root directory of your project:
+The first step is to find the location of the virtual environment. Execute this command in the terminal within the root directory of your project:
 
 ```
 poetry show -v
@@ -148,17 +165,19 @@ The first line of the output is what we are looking for, it should look somethin
 Using virtualenv: /home/pre/.cache/pypoetry/virtualenvs/pypong-py3.7
 ```
 
-Copy the path and go to PyCharm. In PyCharm click on `File -> Settings` and navigate to: `Project: pypong -> Project Interpreter`. Now click on the cog on the right and choose `Add`. A new dialog will open.
+This is the location of the virtual environment.
 
-In the new dialog, choose `Existing environment` then click on the three dots `...` and paste the path you copied before.
+Copy the path and switch to PyCharm. In PyCharm click on `File -> Settings` and navigate to: `Project: pypong -> Project Interpreter`. Now click on the cog on the right and choose `Add`. A new dialog will open.
 
-Finally in this folder, navigate to `bin` and choose `python`. Then click `OK` to add the virtualenv.
+In this dialog, choose `Existing environment` then click on the three dots `...` and paste the path you copied before.
+
+Finally in this folder, navigate to `bin` and choose `python`. Then click `OK` to add the environment.
 
 You can now close the settings window.
 
-Run the code in your IDE again with `Ctrl+Shift+F10`. The output should look slightly different now as PyCharm uses the virtual environment to execute the code.
+Run the code in your IDE again with `Ctrl+Shift+F10`. The output should look slightly different now as PyCharm uses the virtual environment to execute the code. This also means when we add dependencies with Poetry, PyCharm will also be aware of it.
 
-### 5.4. Makefile
+### Makefile
 
 Since we want to be flexible and also run our project in the terminal, let us create a basic Makefile to make our lives easy.
 
@@ -172,7 +191,7 @@ And paste the following content to it:
 
 ```
 all:
-	@echo 'see README.md'
+	@echo 'see README'
 
 run:
 	poetry run python pypong/game.py
@@ -180,7 +199,7 @@ run:
 .PHONY: all run
 ```
 
-You should now be able to run the project with:
+You should now also be able to run the project with:
 
 ```
 make run
@@ -188,7 +207,11 @@ make run
 
 The basic setup is now done and we can continue adding our first dependency.
 
-## 6. Add a depencency
+## PyGame
+
+We will use PyGame to create the Pong clone. This chapter will explain how to add it to our project and how PyGame works.
+
+### Add PyGame depencency
 
 We want to create a game. To do that we need some basic things like a game loop, handling user input, draw things in a window etc. - of course we can create all that on our own but the good thing about Python is: there is a module for everything.
 
@@ -200,9 +223,9 @@ As we are using Poetry, adding a dependency is super easy, just run:
 poetry add pygame
 ```
 
-## 7. Get started with PyGame
+### Hello PyGame
 
-In our `game.py` we already have a function called `main`. Replace the existing code with the following snippet:
+In our `game.py` we already have a function called `main`. Replace the existing code in this function with the following snippet:
 
 ```python
     pygame.init()
@@ -230,11 +253,99 @@ import pygame
 
 Use your IDE to format your code.
 
-Then run your code once in your IDE and once with `make run`. You will see a nice little window with a black background, also you will see the user input on stdout.
+Then run your code once in your IDE and once with `make run`. You will see a nice little window with a black background, furthermore you will see the user input on stdout.
 
-## 8. Paddles
+### PyGame basics
 
-Okay, a black screen is boring so let's start adding the paddles. The goal is to have a rectangle on the left that can be controlled with `W` and `S` and a paddle on the right controlled with `Arrow Up` and `Arrow Down`. The paddles should not leave the window.
+Before we continue, let us have a look at some PyGame basics. This chapter does not require any changes to your project. However read it carefully as we will apply these principles afterwards.
+
+#### Surface
+
+The most important part of PyGame is the `surface`. Just think of a `surface` as a blank piece of paper. You can do a lot of things with a `surface`, you can draw shapes on it, fill parts of it with color or copy images to and from it.
+
+A `surface` can be any size and you can have as many of them as you like. One `surface` is special: the one you create with `pygame.display.set_mode()`. This display `surface` represents the screen. Whatever you do to it will appear on the users screen. You can only have one of these.
+
+#### Update display
+
+After adding elements on your surfaces, the display must be updated so that the outcome can be seen on the users screen. You can do this either with `pygame.display.update()` or `pygame.display.flip()`. It is recommended to use `flip` since it handles double-buffered hardware acceleration correctly.
+
+#### Draw
+
+With `pygame.draw` you get a set of functions to draw basic elements on a `surface`. See https://www.pygame.org/docs/ref/draw.html for an overview. Let's have a closer look at this snippet:
+
+```python
+pygame.draw.rect(
+    surface,
+    (255, 255, 255),
+    (self.x, self.y, self.width, self.height)
+)
+```
+
+This function will draw a rectangle on the given `surface`. The second parameter is the color as a tuple indicating the red, green and blue values. The third parameter is a tuple with the coordinates and size of the rectangle.
+
+#### Coordinates
+
+The coordinate system of each surface is a system that uses two numbers to uniquely determine the position of the points or other geometric elements. Usually those coordinates are named as `x` and `y` and are defined as a tuple. The `(0, 0)` tuple is the **top left corner** of the surface.
+
+That means for example if an object moves down, its `y` coordinate is increasing.
+
+#### Time
+
+Time is a very important aspect in game development. If you move an object 10 pixels to the right in every frame, the speed of the movement depends on how many frames are rendered per second on the users machine. Because of that it is important to consider time when implementing the game loop.
+
+PyGame has an important helper for that: the Clock. A Clock can be created with:
+
+```python
+clock = pygame.time.Clock()
+```
+
+In the game loop you can then call:
+
+```
+clock.tick(60)
+```
+
+Which will pause the loop in a way so that there are a maximum of 60 frames per second. Also it will update the clock.
+
+Afterwards you can get the time passed since the last tick with:
+
+```python
+time_passed_ms = clock.get_time()
+```
+
+This will give you the time in milliseconds since the last tick. This value should be used in all state updates, e.g. moving objects.
+
+**However to keep this tutorial simple, we will not use this function as this Pong clone will run at 60 fps on almost all machines anyways ;-).**
+
+#### User input
+
+User input is very important because every game needs to somehow react upon user input.
+
+First of all PyGame gives you a way to react to events:
+
+```python
+for event in pygame.event.get():
+    print(event)
+```
+
+An event might be mouse movement or pressing a key. However sometimes we want to not only react to a specific event but move an object as long as a key is pressed for instance.
+
+For this kind of user interaction PyGame enables you the check the state of user input and react to this instead:
+
+```python
+if pygame.key.get_pressed()[pygame.K_w]:
+    paddle1.move_up()
+```
+
+These were the basic building blocks of PyGame. Let's continue with creating the main elements of our game.
+
+## Implementing the basic game
+
+Enogh theory, let's jump into developing the game. Our game has some main elements: The paddles, a ball, the game loop and then some extras like an indication of who wins the game. This chapter will explain step by step how to implement these elements.
+
+### Paddles
+
+Okay, a black screen is boring so let's start adding the paddles. The goal is to have a rectangle on the left that can be controlled with `w` and `w` and a paddle on the right controlled with `arrow up` and `arrow down`. The paddles should not leave the window.
 
 Python is object-oriented so let us implement the game using this paradigm.
 
@@ -275,93 +386,9 @@ class Paddle:
 
 The basic idea is that we have a `Paddle` class that can be used for the left and right paddle. The difference is the `x` position that can be set when creating an instance of a `Paddle`. The class also has methods to move the paddle up and down whereas the movemet is limited via the `min` and `max` functions that are part of the built-in Python functions.
 
-Visit https://docs.python.org/3/library/functions.html and check the documentation for `min` and `max` to get a better understanding of those functions. Also read through the list of functions to get an overview what Python offers.
+Visit https://docs.python.org/3/library/functions.html and check the documentation for `min` and `max` to get a better understanding of those functions. Also read through the list of functions to get an overview what else Python offers.
 
-## 9. PyGame basics
-
-Before we continue, let us have a look at some PyGame basics.
-
-### 9.1. Surface
-
-The most important part of PyGame is the `surface`. Just think of a `surface` as a blank piece of paper. You can do a lot of things with a `surface`, you can draw lines on it, fill parts of it with color, copy images to and from it, and set or read individual pixel colors on it.
-
-A `surface` can be any size and you can have as many of them as you like. One `surface` is special: the one you create with `pygame.display.set_mode()`. This display `surface` represents the screen. Whatever you do to it will appear on the users screen. You can only have one of these.
-
-### 9.2. Update display
-
-After adding elements on your surfaces, the display must be updates so that the outcome can be seen on the users screen. You can do this either with `pygame.display.update()` or `pygame.display.flip()`. It is recommended to use `flip` since it handles double-buffered hardware acceleration correctly.
-
-### 9.2. Draw
-
-With `pygame.draw` you get a set of functions to draw basic elements on a `surface`. See https://www.pygame.org/docs/ref/draw.html for an overview. Let's have a closer look at a code snippet of our `Paddle` class:
-
-```python
-pygame.draw.rect(
-    surface,
-    (255, 255, 255),
-    (self.x, self.y, self.width, self.height)
-)
-```
-
-This function will draw a rectangle on the given `surface`. The second parameter is the color as a tuple indicating the red, green and blue values. The third parameter is a tuple with the coordinates and size of the rectangle.
-
-### 9.3. Coordinates
-
-The coordinate system of each surface is a system that uses two numbers to uniquely determine the position of the points or other geometric elements. Usually those coordinates are named as `x` and `y` and are defined as a tuple. The `(0, 0)` tuple is the **top left corner** of the surface.
-
-That means for example if an object moves down, its `y` coordinate is increasing.
-
-### 9.4. Time
-
-Time is a very important aspect in game development. If you move an object 10 pixels to the right in every frame, the speed of the movement depends on how many frames are rendered per second on the users machine. Because of that it is important to consider time when implementing the game loop.
-
-PyGame has an important helper for that: the Clock. A Clock can be created with:
-
-```python
-clock = pygame.time.Clock()
-```
-
-In your game loop you can then call:
-
-```
-clock.tick(60)
-```
-
-Which will pause the loop in a way so that we have a maximum of 60 frames per second. Also it will update the clock.
-
-Afterwards you can get the time passed since the last tick with:
-
-```python
-time_passed_ms = clock.get_time()
-```
-
-This will give you the time in milliseconds since the last tick. This value should be used in all state updates, e.g. moving objects.
-
-**However to keep this tutorial simple, we will not use this function as this Pong clone will run at 60 fps anyways on almost all machines ;-).**
-
-### 9.5. User input
-
-User input is very important because every game needs to somehow reacton user input.
-
-First of all PyGame gives you a way to react to events:
-
-```python
-for event in pygame.event.get():
-    print(event)
-```
-
-An event might be mouse movement or pressing a key. However sometimes we want to not only react to a specific event but move an object as long as a key is pressed for instance.
-
-For this kind of user interaction PyGame enables you the check the state of user input and react to this instead:
-
-```python
-if pygame.key.get_pressed()[pygame.K_w]:
-    paddle1.move_up()
-```
-
-These were the basic building blocks of PyGame. Let's continue with extending the game loop and adding the paddles.
-
-## 10. Game loop
+### Game loop
 
 Now it is time to make use of the `Paddle` class. But before we do that, let us get a basic idea of how the game loop works. Essentially it looks like this:
 
@@ -372,7 +399,7 @@ Now it is time to make use of the `Paddle` class. But before we do that, let us 
     * Draw elements
     * Refresh screen
 
-With this basic structure in mind, go back to the `game.py` and replace the whole file with the following code:
+With this basic structure in mind, go back to the `game.py` file and replace the **whole file** with the following code:
 
 ```python
 import pygame
@@ -425,11 +452,11 @@ if __name__ == '__main__':
 
 ```
 
-Give it a try and execute the project. You should now have two paddles that can be controlled with `W` and `S` or `Arrow Up` and `Arrow Down`.
+Give it a try and execute the project. You should now have two paddles that can be controlled with `w` and `s` or `arrow up` and `arrow down`.
 
 Read through the code carefully to get a basic understanding of how it interacts with the PyGame API.
 
-## 11. The ball - task
+### The ball - task
 
 By now you should know how to run your project, create classes, handle user input and how to use the basic functions that PyGame offers.
 
@@ -437,15 +464,15 @@ Now it is your turn to create a new game object: the ball.
 
 Create a new file `ball.py` and implement a `Ball` class, add it to your game and display it with the following requirements:
 
-* The ball must be a **yellow** square with a length of **20 pixels**
+* The ball must be a **yellow** square with a side length of **20 pixels**
 * Every frame it must **move 5 pixels to the left** until it reaches the **end of the screen**
-* Then it moves **5 pixels to the right** until it reaches the **end of the screen**
+* Then it switches the direction and moves **5 pixels to the right** every frame until it reaches the **end of the screen**
 * Afterwards it must change its direction again and continue to move back and forth like this
 * The starting position must be the **middle of the screen**
 
 Once you are done, continue reading this document as it will have the solution in the next chapter :-).
 
-## 12. The ball - solution
+### The ball - solution
 
 This is one solution to the requirements mentioned before, please compare it to your solution.
 
@@ -455,13 +482,13 @@ The following solution uses NumPy. NumPy is the core library for scientific comp
 
 It is absolutely not required to use NumPy in order to solve the task but we will use it so that you can learn the basics of this essential Python library.
 
-To make the following code work, we need to add NumPy as a dependency with `Poetry` to our project:
+To make the following code work, we need to add NumPy as a dependency with Poetry to our project:
 
 ```
 poetry add numpy
 ```
 
-Now you can integrate the following code and run the project again.
+Now you can integrate the following code and run the project again. Just replace the content of the files.
 
 > ball.py
 
@@ -569,7 +596,7 @@ if __name__ == '__main__':
 
 ```
 
-## 13. NumPy and ball acceleration
+### NumPy and ball acceleration
 
 Okay, now that you applied the solution of the previous chapter, you might have some questions about NumPy.
 
@@ -610,7 +637,7 @@ Which is nothing but a vector scalar multiplicaton with -1 which reverses its di
 
 So as you can see, NumPy arrays are really useful and makes things simple. It will also help us later then we need more advanced movement of the ball object.
 
-## 14. Collision detection - theory and task
+### Collision detection - theory and task
 
 We now have two paddles and a ball. The ball knows when it hits the wall since it knows its own position and can access the screen width via PyGame.
 
@@ -647,7 +674,7 @@ In addition use the built-in function `print` to print out a text to stdout when
 
 Continue with the next chapter once you are done.
 
-## 14. Collision detecion - solution
+### Collision detecion - solution
 
 This is one solution to the requirements mentioned before, please compare it to your solution.
 
@@ -739,13 +766,13 @@ if __name__ == '__main__':
 
 ```
 
-## 15. Ball movement - task
+### Ball movement - task
 
 We are now able to detect if the ball collides with the left edge, the right edge or one of the paddles.
 
 Now we need to adjust the movement of the ball and we must also detect and react to collisions with the top and bottom edges of the surface.
 
-The task is to implement the correct behavior of the ball object based on the following rules:
+Your task now is to implement the correct behavior of the ball object based on the following rules:
 
 * **(1)** When the ball hits the left or right border, the angle of reflection is equal to the angle of incidence.
 * **(2)** When the ball hits the top or bottom border, the angle of reflection is equal to the angle of incidence.
@@ -763,7 +790,7 @@ The following overview visualizes the cases with some examples:
 
 ![ball movement](doc/ball_movement.png)
 
-## 16. Ball movement - solution
+### Ball movement - solution
 
 This is one solution to the requirements mentioned before, please compare it to your solution.
 
@@ -923,11 +950,11 @@ if __name__ == '__main__':
 
 ```
 
-## 17. Make it a game
+### Make it a game
 
 Now that we have the basic elements, it is time to make a game out of this prototype.
 
-This is where you should become creative and find your own way how to add the missing elements. The goal at the end is to have the following features:
+This is where you should become creative and find your own way of how to add the missing elements. The goal at the end is to have the following features:
 
 * Paddles / players should have lives and if there is a collision between the ball and a left or right border, the respective player should loose a live.
 * Implement a new GUI class that is able to show the lives of the players as text in the game. To give you some inspiration, this is how it might look like:
@@ -959,12 +986,12 @@ class PaddleGui:
 * When a player reaches 0 lives, the game should end and show a winner.
 * Add an optional computer player.
 
-## 18. The final result
+## The final game
 
 Check out the code in this repository to see the final result.
 
-## 19. Machine learning
+## Machine learning
 
-Python is often used for machine learning purposes. Even though this project does not really require any kind of machine learning to create a artifical player, I would still like to take the chance and give you a short introduction to machine learning using this project.
+Python is often used for machine learning purposes. Even though this project does not really require any kind of machine learning to create an artifical player, I would still like to take the chance and give you a short introduction to machine learning using this project.
 
 For the next chapter, see: [LEARNING.md](LEARNING.md)
