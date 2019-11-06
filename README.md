@@ -13,6 +13,49 @@ This guide includes:
 * Use NumPy for vector calculations
 * Use scikit-learn to predict actions
 
+- [PyPong - Learn Python and Machine Learning with Pong](#pypong---learn-python-and-machine-learning-with-pong)
+  * [Requirements](#requirements)
+  * [Project setup](#project-setup)
+    + [Create the project with Poetry](#create-the-project-with-poetry)
+    + [Generated files overview](#generated-files-overview)
+    + [First steps with Poetry](#first-steps-with-poetry)
+  * [Hello world](#hello-world)
+  * [Configuration](#configuration)
+    + [Cleanup files](#cleanup-files)
+    + [Configure sources root in PyCharm](#configure-sources-root-in-pycharm)
+    + [Configure virtualenv in PyCharm](#configure-virtualenv-in-pycharm)
+    + [Makefile](#makefile)
+  * [PyGame](#pygame)
+    + [Add PyGame depencency](#add-pygame-depencency)
+    + [Hello PyGame](#hello-pygame)
+    + [PyGame basics](#pygame-basics)
+      - [Surface](#surface)
+      - [Update display](#update-display)
+      - [Draw](#draw)
+      - [Coordinates](#coordinates)
+      - [Time](#time)
+      - [User input](#user-input)
+  * [Implementing the basic game](#implementing-the-basic-game)
+    + [Paddles](#paddles)
+    + [Game loop](#game-loop)
+    + [The ball - task](#the-ball---task)
+    + [The ball - solution](#the-ball---solution)
+    + [NumPy and ball acceleration](#numpy-and-ball-acceleration)
+    + [Collision detection - theory and task](#collision-detection---theory-and-task)
+    + [Collision detecion - solution](#collision-detecion---solution)
+    + [Ball movement - task](#ball-movement---task)
+    + [Ball movement - solution](#ball-movement---solution)
+    + [Make it a game](#make-it-a-game)
+  * [The final game](#the-final-game)
+  * [Machine Learning introduction with Pong](#machine-learning-introduction-with-pong)
+    + [Simple AI](#simple-ai)
+    + [scikit-learn](#scikit-learn)
+    + [Linear Regression and Logistic Regression](#linear-regression-and-logistic-regression)
+    + [Training data](#training-data)
+    + [Predict actions](#predict-actions)
+    + [More theory and data visualization](#more-theory-and-data-visualization)
+  * [Fin](#fin)
+
 This repository already contains the final result. This guide will tell you step by step how to get there.
 
 ## Requirements
@@ -1041,7 +1084,7 @@ Python has lots of modules connected to the topic of AI and machine learning, ho
 * Model selection: Comparing, validating and choosing parameters and models.
 * Preprocessing: Feature extraction and normalization.
 
-### Linear Regression / Logistic Regression
+### Linear Regression and Logistic Regression
 
 Linear regression models are used to show or predict the relationship between variables or factors.
 
