@@ -6,7 +6,7 @@ authors = ["Volker Janz <volker.janz@innogames.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-pygame = "^1.9"
+pygame = "^2.0dev6"
 numpy = "^1.17"
 sklearn = "^0.0.0"
 matplotlib = "^3.1"
