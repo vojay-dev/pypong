@@ -2,6 +2,7 @@ import random
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
 
 
@@ -15,7 +16,7 @@ class Computer:
         target_values = [1, 0, 1, 0]
 
         self.model = LogisticRegression()
-        self.model.fit(training_data, target_values)
+        self.model.fit(preprocessing.normalize(training_data), target_values)
 
         # prediction function used for linear regression
         print('f(paddle_center, ball_center) = {} + {} * paddle_center + {} * ball_center'.format(
@@ -25,13 +26,13 @@ class Computer:
         ))
 
         # uncomment to visualize the input and prediction data
-        #self._visualize_data_relationship()
+        self._visualize_data_relationship()
 
     def move(self, paddle, ball):
         paddle_center = paddle.y + paddle.height / 2
         ball_center = ball.position[1] + ball.height / 2
 
-        prediction = self.model.predict([[paddle_center, ball_center]])
+        prediction = self.model.predict(preprocessing.normalize([[paddle_center, ball_center]]))
         print('input: [{}, {}], prediction: {}'.format(paddle_center, ball_center, prediction))
 
         if prediction == 0:
@@ -54,8 +55,8 @@ class Computer:
         df = pd.DataFrame(random_inputs, columns=['y_center_paddle', 'y_center_ball'])
         df['action'] = predictions
 
-        ax1 = df[df['action'] == 1].plot(kind='scatter', x='y_center_paddle', y='y_center_ball', s=100, color='blue')
-        df[df['action'] == 0].plot(kind='scatter', x='y_center_paddle', y='y_center_ball', s=100, color='magenta',
+        ax1 = df[df['action'] == 0].plot(kind='scatter', x='y_center_paddle', y='y_center_ball', s=100, color='blue')
+        df[df['action'] == 1].plot(kind='scatter', x='y_center_paddle', y='y_center_ball', s=100, color='magenta',
                                    ax=ax1)
 
         plt.legend(labels=['Move UP', 'Move DOWN'])
